@@ -6,7 +6,11 @@ router.get("/", authorization, async (req, res) => {
     try {
 
         //this only gets run if authorization middleware is succesfully return. So req.user has the payload
-        res.json(req.user)
+        // res.json(req.user)
+
+        const user = await pool.query("SELECT user_name FROM users WHERE user_id = $1", [req.user])
+
+        res.json(user.rows[0]);
         
     } catch (err) {
         console.error(err.message)

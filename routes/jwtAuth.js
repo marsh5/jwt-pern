@@ -21,7 +21,7 @@ router.post('/register', validInfo, async (req,res) => {
         ]);
 
         if(user.rows.length !== 0){
-            return res.status(401).send('user already exists')
+            return res.status(401).json('user already exists')
         }
 
         //3. Bcrypt the user password
@@ -64,17 +64,15 @@ router.post('/login', validInfo, async (req, res) => {
         ]);
 
         if(user.rows.length === 0){
-            return res.status(401).semd("Password or email is incorrect")
+            return res.status(401).json("Password or email is incorrect")
         }
 
         //3. check if incoming password is the same as the database password
 
         const validPassword = await bcrypt.compare(password, user.rows[0].user_password);
 
-        console.log(validPassword);
-
         if(!validPassword){
-            return res.status(401).semd("Password or email is incorrect")
+            return res.status(401).json("Password or email is incorrect")
         }
 
         //4. give them the jwttoken
